@@ -36,9 +36,16 @@ const resolvers = {
       return { token, userData };
     },
 
-    saveBook: async {
-      
-    }
+    saveBook: async (parent, { book }, context) {
+      if (context.user) {
+        const updateUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId: bookId }} },
+          { new: true },
+        );
+      },
+    },
   },
-
 };
+
+module.exports = resolvers;
