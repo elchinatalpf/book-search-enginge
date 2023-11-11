@@ -36,7 +36,7 @@ const resolvers = {
       return { token, userData };
     },
 
-    saveBook: async (parent, { book }, context) {
+    saveBook: async (parent, { book }, context) => {
       if (context.user) {
         const updateUser = await User.findOneAndUpdate(
           { _id: context.user._id },

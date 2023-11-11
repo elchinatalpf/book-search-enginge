@@ -1,6 +1,6 @@
 import React from 'react';
-import SearchBooks from './pages/SearchBooks';
-import SavedBooks from './pages/SavedBooks';
+// import SearchBooks from './pages/SearchBooks';
+// import SavedBooks from './pages/SavedBooks';
 import NavBar from './components/Navbar';
 import './App.css';
 import { Outlet } from 'react-router-dom';
@@ -11,12 +11,10 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-import Navbar from './components/Navbar';
-
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Navbar />
+      <NavBar />
       <Outlet />
     </ApolloProvider>
   );
