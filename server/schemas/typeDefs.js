@@ -41,7 +41,6 @@ input BookInput {
   link: String
 }
 
-  
 `;
 
 module.exports = typeDefs;
