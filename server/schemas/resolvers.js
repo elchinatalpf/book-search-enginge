@@ -7,13 +7,13 @@ const resolvers = {
       if (context.user) {
         return User.findOne({ _id: context.user._id });
       }
-      throw AuthenticationError;
+      throw new AuthenticationError('User is not logged In');
     },
   },
 
   Mutation: {
-    addUser: async (parent, { name, email, password }) => {
-      const newUser = await User.create({ name, email, password });
+    addUser: async (parent, { username, email, password }) => {
+      const newUser = await User.create({ username, email, password });
       const token = signToken(newUser);
 
       return { token, newUser };
@@ -23,13 +23,13 @@ const resolvers = {
       const userData = await User.findOne({ email });
       
       if (!userData) {
-        throw AuthenticationError;
+        throw new AuthenticationError('Incorret Credentials');
       }
 
       const correctPw = await userData.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw AuthenticationError;
+        throw new AuthenticationError('Incorrect Credentials');
       }
 
       const token = signToken(userData);
@@ -40,11 +40,26 @@ const resolvers = {
       if (context.user) {
         const updateUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: { bookId: bookId }} },
+          { $addToSet: { savedBooks: { book } } },
           { new: true },
         );
-      },
+        return updateUser;
+      };
+      throw new AuthenticationError('User is not logged In');
     },
+
+    removeBook: async(parent, { bookId }, context) => {
+      if (context.user) {
+        const updateUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true }
+        );
+        return updateUser;
+      }
+      throw new AuthenticationError('User is not logged In');
+    }
+
   },
 };
 
