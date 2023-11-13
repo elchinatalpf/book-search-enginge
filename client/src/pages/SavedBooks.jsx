@@ -27,14 +27,14 @@ const SavedBooks = () => {
     try {
       await removeBook({
         variables: { bookId: bookId },
-        // update: cache => {
-        //   const { me } = cache.readQuery({ query: GET_ME });
-        //   const updateBooks = me.savedBooks.filter((book) => book.bookId !== bookId);
-        //   cache.writeQuery({
-        //     query: GET_ME,
-        //     data: { me: { ...me, savedBooks: updateBooks }}
-        //   });
-        // },
+        update: cache => {
+          const { me } = cache.readQuery({ query: GET_ME });
+          const updateBooks = me.savedBooks.filter((book) => book.bookId !== bookId);
+          cache.writeQuery({
+            query: GET_ME,
+            data: { me: { ...me, savedBooks: updateBooks }}
+          });
+        },
       });
 
       removeBookId(bookId);
@@ -66,8 +66,8 @@ const SavedBooks = () => {
         <Row>
           {userData.savedBooks.map((book) => {
             return (
-              <Col md="4">
-                <Card key={book.bookId} border="dark">
+              <Col key={book.bookId} md="4">
+                <Card  border="dark">
                   {book.image ? (
                     <Card.Img
                       src={book.image}
