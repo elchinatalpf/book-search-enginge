@@ -66,7 +66,6 @@ const SearchBooks = () => {
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
     // find the book in `searchedBooks` state by the matching id
-    console.log('after handleSavedbook  fires');
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
     // get token
@@ -77,16 +76,15 @@ const SearchBooks = () => {
     }
 
     try {
-      console.log('inside the try block');
       const { data } = await saveBook({
         variables: { book: { ...bookToSave } },
-        // update: (cache) => {
-          //   const { me } = cache.readQuery({ query: GET_ME });
-          //   cache.writeQuery({
-            //     query: GET_ME,
-            //     data: { me: { ...me, savedBooks: [...me.savedBooks, bookToSave] } },
-            //   });
-            // },
+        update: (cache) => {
+            const { me } = cache.readQuery({ query: GET_ME });
+            cache.writeQuery({
+                query: GET_ME,
+                data: { me: { ...me, savedBooks: [...me.savedBooks, bookToSave] } },
+              });
+            },
           });
           console.log(data);
 console.log(savedBookIds);

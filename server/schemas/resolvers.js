@@ -9,7 +9,7 @@ const resolvers = {
         .select('_v -password')
         return userData;
       }
-      throw new AuthenticationError('User is not logged In');
+      throw AuthenticationError;
     },
   },
 
@@ -25,13 +25,13 @@ const resolvers = {
       const userData = await User.findOne({ email });
       
       if (!userData) {
-        throw new AuthenticationError('Incorret Credentials');
+        throw AuthenticationError;
       }
 
       const correctPw = await userData.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect Credentials');
+        throw AuthenticationError;
       }
 
       const token = signToken(userData);
@@ -47,7 +47,7 @@ const resolvers = {
         );
         return updateUser;
       };
-      throw new AuthenticationError('User is not logged In');
+      throw AuthenticationError;
     },
 
     removeBook: async(parent, { bookId }, context) => {
@@ -59,7 +59,7 @@ const resolvers = {
         );
         return updateUser;
       }
-      throw new AuthenticationError('User is not logged In');
+      throw AuthenticationError;
     }
 
   },
